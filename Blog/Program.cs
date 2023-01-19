@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigureAuthentication(builder);
@@ -15,10 +16,16 @@ ConfigureServices(builder);
 
 var app = builder.Build();
 LoadConfiguration(app);
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    Console.WriteLine("In Development !");
+}
 app.Run();
 
 void LoadConfiguration(WebApplication app)
@@ -51,10 +58,17 @@ void ConfigureAuthentication(WebApplicationBuilder builder)
 
 void ConfigureMVC(WebApplicationBuilder builder)
 {
+    builder.Services.AddMemoryCache();
     builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(opt =>
     {
         opt.SuppressModelStateInvalidFilter = true;
+    })
+    .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+
     });
 }
 
