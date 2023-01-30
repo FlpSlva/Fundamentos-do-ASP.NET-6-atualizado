@@ -1,6 +1,6 @@
 ﻿using Blog.Data;
 using Blog.Extensions;
-using Blog.Models;
+using Blog.Domain.Entities;
 using Blog.Services;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -26,20 +26,15 @@ namespace Blog.Controllers
 
             try
             {
-                var user = new User
-                {
-                    Name = model.Name,
-                    Email = model.Email,
-                    Bio = "string",
-                    Image = "string",
-                    Posts = null,
-                    
-                    Slug = model.Email.Replace("@", "-").Replace(".", "-"),
-                    Roles = new List<Role> { new Role { Name = "admin", Slug = "teste" } }
-                };
+                var user = new User(model.Name, model.Email, "string", model.Email.Replace("@", "-").Replace(".", "-"), "string");
+                var roles = new Role(user.Name, user.Email);
+                var posts = new Post();
+                user.AddRole(roles);
+                user.AddPosts(posts);
+                
 
                 var password = PasswordGenerator.Generate(25);
-                user.PasswordHash = PasswordHasher.Hash(password);
+                user.SetPasswordHash(PasswordHasher.Hash(password));
 
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
@@ -127,7 +122,9 @@ namespace Blog.Controllers
             if (user == null) return NotFound(new ResultViewModel<User>("Usuário não encontrado"));
 
 
-            user.Image = $"https://localhost:0000/images/{fileName}";
+            var url = $"https://localhost:0000/images/{fileName}";
+            user.UpdatedImage(url);
+            
 
             try
             {
