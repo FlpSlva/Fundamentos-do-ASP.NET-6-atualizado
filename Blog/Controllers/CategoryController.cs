@@ -1,6 +1,6 @@
 ﻿using Blog.Data;
 using Blog.Extensions;
-using Blog.Models;
+using Blog.Domain.Entities;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +61,7 @@ namespace Blog.Controllers
 
             try
             {
-                var category = new Category {Id = 0, Name = model.Name, Slug = model.Slug };
+                var category = new Category(0, model.Name, model.Slug );
 
 
                 await context.Categories.AddAsync(category);
@@ -100,8 +100,8 @@ namespace Blog.Controllers
 
             if (category == null) return NotFound();
             
-            category.Name = model.Name;
-            category.Slug= model.Slug;
+            category.ChangeName(model.Name);
+            category.ChangeSlug(model.Slug);
 
 
             context.Categories.Update(category);
