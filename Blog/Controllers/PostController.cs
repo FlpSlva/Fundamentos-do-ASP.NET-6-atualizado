@@ -1,5 +1,5 @@
 ﻿using Blog.Data;
-using Blog.Models;
+using Blog.Domain.Entities;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
