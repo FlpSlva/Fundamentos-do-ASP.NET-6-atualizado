@@ -1,5 +1,5 @@
 using Blog.Data.Mappings;
-using Blog.Models;
+using Blog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Data
