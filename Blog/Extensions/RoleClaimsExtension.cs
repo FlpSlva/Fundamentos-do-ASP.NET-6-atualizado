@@ -1,4 +1,4 @@
-﻿using Blog.Models;
+﻿using Blog.Domain.Entities;
 using System.Security.Claims;
 
 namespace Blog.Extensions
