@@ -1,5 +1,5 @@
 ﻿using Blog.Extensions;
-using Blog.Models;
+using Blog.Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
